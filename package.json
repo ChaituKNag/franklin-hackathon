@@ -1,0 +1,17 @@
+{
+  "name": "franklin-hackathon",
+  "author": "John Guthrie <john.guthrie@franklintempleton.co.uk>",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+  	"browser-sync": "^2.9.0",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-cssnano": "^2.0.0",
+    "gulp-less": "^3.0.5",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.0.1",
+    "main-bower-files": "^1.0.1"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "franklin-hackathon",
+  "version": "0.1.0",
+  "authors": [
+    "John Guthrie <john.guthrie@franklintempleton.co.uk>"
+  ],
+  "description": "Franklin Hackathon simple build environment",
+  "keywords": [
+    "bootstrap",
+    "less",
+    "css",
+    "gulp",
+    "bower"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": ["less/**/!(variables).less", "./dist/fonts/*", "./dist/js/bootstrap.js"]
+    }
+  },
+  "license": "MIT",
+  "private": true
+}
