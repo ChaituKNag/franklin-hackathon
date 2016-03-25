@@ -6,11 +6,9 @@
   ],
   "description": "Franklin Hackathon simple build environment",
   "keywords": [
-    "bootstrap",
-    "less",
-    "css",
-    "gulp",
-    "bower"
+    "hackathon",
+    "creativity",
+    "innovation"
   ],
   "dependencies": {
     "bootstrap": "~3.3.5"

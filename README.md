@@ -14,4 +14,5 @@ This project serves as a simple application framework to get you up an running i
 ## License
 
 The MIT License (MIT)
+
 Copyright 2016 Franklin Resources, Inc.
