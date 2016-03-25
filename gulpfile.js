@@ -12,7 +12,9 @@ var fs = require('fs');
 
 var reload = browserSync.reload;
 
-gulp.task('build', ['icons', 'inject-favicon-markups', 'css', 'js']);
+gulp.task('build', ['css', 'js'], function buildComplete() {
+  return console.log("Build complete\ntype gulp serve to start your hackathon application");
+});
 
 gulp.task('mainBowerFiles', function moveBowerDeps() {
   return gulp.src(mainBowerFiles(), { base: 'bower_components' })
@@ -77,7 +79,7 @@ gulp.task('icons', function(done) {
     },
     markupFile: FAVICON_DATA_FILE
   }, function() {
-    done();
+    return done();
   });
 });
 
