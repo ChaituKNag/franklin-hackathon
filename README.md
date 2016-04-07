@@ -1,6 +1,6 @@
 ## Franklin Templeton Web Hackathon
 
-This project serves as a simple application framework to get you up an running in the web hackathon.
+This project serves as a simple application framework to get you up an running in the web hackathon. You will need to have a local copy of NodeJS installed - https://nodejs.org and optionally you will need GIT if you want to clone this repository, otherwise use the download zip function.
 
 ## Installation
 
