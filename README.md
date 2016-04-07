@@ -34,7 +34,7 @@ Likewise for JavaScript:
 ````
 $ gulp js
 ````
-Gulp will be automatically watching for any changes to LESS and JavaScript assets, any changes to a LESS or JavaScript file will trigger their corresponding build process then reload the application in your browser.
+Gulp will be automatically watching for any changes to LESS and JavaScript assets, any changes to a LESS or JavaScript file will trigger their corresponding build process then reload the application in your browser. You may wish to send the external browsersync URL to your team mates so that they can watch the application development in real time.
 
 ## Support
 
