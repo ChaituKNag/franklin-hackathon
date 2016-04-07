@@ -28,11 +28,11 @@ $ gulp build
 ````
 If you only want to build the CSS assets you can individually call:
 ````
-$ gulp build
+$ gulp css
 ````
 Likewise for JavaScript:
 ````
-$ gulp build
+$ gulp js
 ````
 Gulp will be automatically watching for any changes to LESS and JavaScript assets, any changes to a LESS or JavaScript file will trigger their corresponding build process then reload the application in your browser.
 
