@@ -23,9 +23,11 @@
     <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/main.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+    <script src="/js/controller.min.js"></script>
 </head>
 
-<body>
+<body ng-app="quizathon" ng-controller="quizathonCtrl as quiz">
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -42,11 +44,35 @@
         </div>
     </div>
     <div class="container">
-        <h1>Franklin Templeton Web Hackathon</h1>
-        <p class="lead">A template for your hackathon application.</p>
-        <hr>
+        <h1>Quizathon</h1>
+        <p class="lead">A simple quizzing application for fun.</p>
+        <div class="jumbotron">
         <div class="row">
-            <div class="col-sm-6">
+          <div class="">
+            <form class="col-sm-12" ng-repeat="question in quiz.questions" id="{{$index}}" name="question-{{question.id}}" ng-show="quiz.currentShownId === $index">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">{{question.q}}</h3>
+                </div>
+                <div class="panel-body">
+                  <div ng-repeat="option in question.opts" class="">
+                    <label class="">
+                      <input type="radio" id="{{option.id}}">
+                      {{option.val}}
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+            <nav>
+              <ul class="pager pager-lg">
+                <li><a href="#" ng-click="quiz.slideIt(false)" ng-hide="quiz.currentShownId === 0">Previous</a></li>
+                <li><a href="#" ng-click="quiz.slideIt(true)" ng-hide="quiz.currentShownId === quiz.questions.length-1">Next</a></li>
+              </ul>
+            </nav>
+          </div>
+            <!-- <div class="col-sm-6">
                 <h2>Heading</h2>
                 <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
                 <p><a href="#" role="button" class="btn btn-default">View details »</a></p>
@@ -65,8 +91,9 @@
                 <h2>Heading</h2>
                 <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
                 <p><a href="#" role="button" class="btn btn-default">View details »</a></p>
-            </div>
+            </div> -->
         </div>
+      </div>
     </div>
     <footer>
         <div class="container text-center">

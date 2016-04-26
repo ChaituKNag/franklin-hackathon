@@ -83,8 +83,8 @@ gulp.task('icons', function(done) {
   });
 });
 
-// Inject the favicon markups in your HTML pages. You should run 
-// this task whenever you modify a page. You can keep this task 
+// Inject the favicon markups in your HTML pages. You should run
+// this task whenever you modify a page. You can keep this task
 // as is or refactor your existing HTML pipeline.
 gulp.task('inject-favicon-markups', function() {
   return gulp.src(['public/*.html'])
@@ -94,7 +94,7 @@ gulp.task('inject-favicon-markups', function() {
 
 // Check for updates on RealFaviconGenerator (think: Apple has just
 // released a new Touch icon along with the latest version of iOS).
-// Run this task from time to time. Ideally, make it part of your 
+// Run this task from time to time. Ideally, make it part of your
 // continuous integration system.
 gulp.task('check-for-favicon-update', function(done) {
   var currentVersion = JSON.parse(fs.readFileSync(FAVICON_DATA_FILE)).version;
@@ -131,7 +131,7 @@ gulp.task('css', ['less:compile'], function() {
 });
 
 gulp.task('js', function() {
-  return gulp.src(['src/jquery/dist/*.js', 'src/bootstrap/dist/js/*.js', 'src/js/main.js'])
+  return gulp.src(['src/jquery/dist/*.js', 'src/bootstrap/dist/js/*.js', 'src/js/*.js'])
     .pipe(uglify())
     .pipe(rename({
       suffix: '.min'
