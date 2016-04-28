@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var service = require('gulp-service');
 var mainBowerFiles = require('main-bower-files');
 var less = require('gulp-less');
 var browserSync = require('browser-sync');
@@ -10,9 +11,13 @@ var cssnano = require('gulp-cssnano');
 var realFavicon = require ('gulp-real-favicon');
 var fs = require('fs');
 
+var nodemon = require('gulp-nodemon');
+var notify = require('gulp-notify');
+var livereload = require('gulp-livereload');
+
 var reload = browserSync.reload;
 
-gulp.task('build', ['css', 'js'], function buildComplete() {
+gulp.task('build', ['css', 'js', 'img'], function buildComplete() {
   return console.log("Build complete\ntype gulp serve to start your hackathon application");
 });
 
@@ -139,6 +144,24 @@ gulp.task('js', function() {
     .pipe(gulp.dest('public/js'));
 });
 
+gulp.task('img', function() {
+  return gulp.src(['src/images/questions/*.png'])
+    .pipe(gulp.dest('public/images/questions'));
+});
+
 gulp.task('watch', ['less:compile'], function watch() {
   gulp.watch(['src/less/bootstrap/variables.less'], ['less:compile', reload]);
+});
+
+
+gulp.task('app', function() {
+	livereload.listen();
+	nodemon({
+		script: 'app/index.js',
+		ext: 'js'
+	}).on('restart', function(){
+		gulp.src('app/index.js')
+			.pipe(livereload())
+			.pipe(notify('API restart'));
+	});
 });
