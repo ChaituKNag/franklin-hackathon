@@ -6,8 +6,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <link rel="icon" href="/favicon.ico">
-  <title>Franklin Templeton Hackathon</title>
+  <title>Quizathon - Hackathonists - Team 6</title>
   <meta name="msapplication-tap-highlight" content="no">
   <link rel="manifest" href="manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
@@ -23,7 +24,9 @@
   <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/css/bootstrap.min.css" />
   <link rel="stylesheet" href="/css/main.min.css">
+  <link rel="stylesheet" href="/css/loading.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
   <style>
     #finalScore {
       font-size: 60px;
@@ -46,100 +49,66 @@
           <i class="fa fa-cube"></i>Quizathon</a>
         <div class="navbar-text">A simple quizzing application for fun</div>
       </div>
-      <!-- <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Home</a></li>
-        <li><a href="/api">API Examples</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/ideas.html">Ideas?</a></li>
-      </ul>
-    </div> -->
     </div>
   </div>
 <div class="container">
-  <!-- <h1>Quizathon</h1>
-  <p class="lead">A simple quizzing application for fun.</p> -->
-  <!-- <form method="post" action="/login">
-  <input type="text" name="username">
-  <input type="submit">
-</form> -->
-<div class="jumbotron">
+<div class="">
+
+  <!-- AUTHENTICATION AND WELCOME MESSAGE SECTION-->
   <div class="authDiv" ng-show="!quiz.authenticated">
     <div class="panel panel-default col-lg-8 col-lg-offset-2 col-md-offset-2 col-md-8">
       <div class="panel-body">
         <div class="page-header text-center"><h1>Quizathon</h1></div>
         <div ><img class="img-responsive center-block" src="/images/quizathon_logo.png" alt="The Quizathon logo"/></div>
-        <p class="text-center">This is the welcome message</p>
+        <p class="text-center">Brave enough to find out how smart you are?  Challange yourself with one of the categories below!</p>
         <div class="well">
-          <form class="" action="" name="startQuiz" method="post">
+          <form class="" name="startQuiz">
             <div class="form-group form-group-lg">
-              <label class="control-label">Enter your unique nickname:</label>
-              <input type="text" ng-model="quiz.uid" placeholder="Your unique nickname" class="form-control" required/>
+              <label class="control-label">What... is your name?</label>
+              <input type="text" ng-model="quiz.uid" placeholder="Enter name" class="form-control" required/>
             </div>
             <div class="form-group form-group-lg">
-              <label class="control-label">Select a category</label>
+              <label class="control-label">I think I am good at...?</label>
               <select class="form-control" id="category" required>
-                <option value="first">First option</option>
-                <option value="second">Second option</option>
+                <option value="ben">BEN & Finance</option>
+                <option value="Generic">I know everything</option>
               </select>
             </div>
             <div class="text-center">
-              <button type="button" ng-disabled="!startQuiz.$valid" class="btn btn-success btn-lg" ng-click="quiz.startQuiz()">Take the quiz!</button>
+              <button type="button" ng-disabled="!startQuiz.$valid" class="btn btn-success btn-lg" ng-click="quiz.startQuiz()">Go Ninja!</button>
             </div>
           </form>
 
         </div>
 
       </div>
-      <!-- <div class="panel-footer">
-        <p>Are you new to the quiz? <span><a href="#">Sign Up</a></span></p>
-
-      </div> -->
     </div>
 
   </div>
-  <div class="row" ng-show="quiz.authenticated && !quiz.finished">
-    <!-- Paginated question numbers -->
-    <!-- <div class="text-center">
-    <nav>
-    <ul class="pagination pagination-lg ">
-    <li ng-class="{'disabled': quiz.currentShownId === 0}">
-    <a href="#" aria-label="Previous" ng-click="quiz.slideIt(false)" >
-    <span aria-hidden="true">&laquo;</span>
-  </a>
-</li>
-<li ng-repeat="question in quiz.questions" ng-class="{'active': quiz.currentShownId === $index}"><a href="#" ng-click="quiz.currentShownId=$index">{{$index + 1}}</a></li>
-<li ng-class="{'disabled': quiz.currentShownId === quiz.questions.length-1}">
-<a href="#" aria-label="Next" ng-click="quiz.slideIt(true)" >
-<span aria-hidden="true">&raquo;</span>
-</a>
-</li>
-</ul>
-</nav>
-</div> -->
+
+
+
+
+
+
+
+
+  <!-- QUIZ AND QUESTIONS SECTION-->
+<div class="row" ng-show="quiz.authenticated && !quiz.finished">
 <div class="">
 
   <div class="panel panel-default">
     <div class="panel-body">
-      <p>Progress bar (This is question {{quiz.questionData.q}}/{{quiz.questionData.max}})</p>
-      <div class="progress">
-        <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-          <span class="sr-only">{{quiz.questionData.q}}/{{quiz.questionData.max}} Complete</span>
+      <p>Progress-O-Meter (Question {{quiz.questionData.q}}/{{quiz.questionData.max}})</p>
+      <div class="progress progress-bar-striped active">
+        <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
+        style="width: {{quiz.progress}}%"
+        ng-attr-style="width:{{quiz.progress}}%;"
+        >
+          <span class="sr-only">Question {{quiz.questionData.q}}/{{quiz.questionData.max}}</span>
         </div>
       </div>
     </div>
-    <!-- <nav class="col-lg-2 col-md-2">
-    <ul class="pager pager-lg">
-    <li><a href="#" ng-click="quiz.slideIt(false)" ng-hide="quiz.currentShownId === 0">Previous</a></li>
-    <li><a href="#" ng-click="quiz.slideIt(true)" ng-hide="quiz.currentShownId === quiz.questions.length-1">Next</a></li>
-    <li><a href="#" ng-click="" ng-hide="quiz.currentShownId !== quiz.questions.length-1">Finish</a></li>
-  </ul>
-</nav> -->
-<!-- <div class="panel-footer">
-<button class="btn btn-success" ng-click="quiz.slideIt(true)" ng-hide="quiz.currentShownId === quiz.questions.length-1">Next</button>
-<button class="btn btn-success" ng-hide="quiz.currentShownId !== quiz.questions.length-1">Finish</button>
-</div> -->
 
 </div>
 <div class="panel panel-default">
@@ -147,9 +116,10 @@
     <h4 class="">{{quiz.questionData.qt}}</h4>
   </div>
   <div class="panel-body">
-    <!-- <div class="" ng-show="quiz..qType === 'img'">
-      <img class="img-responsive center-block" ng-src="{{question.imgPath}}"  alt="{{question.q}}" />
-    </div> -->
+    <div class="" ng-if="quiz.questionData.img">
+      <img class="img-responsive center-block" ng-src="/images/questions/{{quiz.questionData.img}}"  alt="{{quiz.questionData.q}}" />
+    </div>
+    <br/>
     <div  class="">
       <form class="col-sm-12" id="{{$index}}" name="questionForm" >
         <label class="center-block" ng-repeat="option in quiz.questionData.arr">
@@ -160,129 +130,59 @@
     </div>
   </div>
 </div>
-
-
-
-
-<!-- <div class="panel" ng-repeat="question in quiz.questions" ng-show="quiz.currentShownId === $index" ng-class="{
-  'panel-info': question.diff <= 3,
-  'panel-warning': question.diff > 3 && question.diff <= 6,
-  'panel-danger': question.diff > 6
-}">
-<div class="panel-heading ">
-  <h4 class="">{{question.q}}</h4>
-</div>
-<div class="panel-body">
-  <div class="" ng-show="question.qType === 'img'">
-    <img class="img-responsive center-block" ng-src="{{question.imgPath}}"  alt="{{question.q}}" />
-  </div>
-  <div  class="">
-    <form class="col-sm-12" id="{{$index}}" name="question-{{question.id}}" >
-      <label class="center-block" ng-repeat="option in question.opts">
-        <h4><input type="radio" id="{{option.id}}" name="{{question.id}}">
-          {{option.val}}</h4>
-        </label>
-      </form>
-    </div>
-  </div>
-</div> -->
 <div class="well text-center">
-  <button class="btn btn-success btn-lg" ng-click="quiz.nextQuestion()" ng-hide="quiz.questionData.q === quiz.questionData.max" ng-disabled="!quiz.selectedOption" >Next question</button>
-  <button class="btn btn-success btn-lg" ng-hide="quiz.questionData.q !== quiz.questionData.max" ng-click="quiz.finishQuiz()">Submit your quiz</button>
-</div>
-</div>
-
-<!-- <form class="col-sm-12" ng-repeat="question in quiz.questions" id="{{$index}}" name="question-{{question.id}}" ng-show="quiz.currentShownId === $index">
-<div class="panel" ng-class="{
-'panel-info': question.diff <= 3,
-'panel-warning': question.diff > 3 && question.diff <= 6,
-'panel-danger': question.diff > 6
-}">
-<div class="panel-heading ">
-<h4 class="">{{question.q}}</h4>
-</div>
-<div class="panel-body">
-<div class="" ng-show="question.qType === 'img'">
-<img class="img-responsive center-block" ng-src="{{question.imgPath}}"  alt="{{question.q}}" />
-</div>
-<div  class="">
-<label class="center-block" ng-repeat="option in question.opts">
-<h4><input type="radio" id="{{option.id}}" name="{{question.id}}">
-{{option.val}}</h4>
-</label>
+  <button class="btn btn-success btn-lg" ng-click="quiz.nextQuestion()" ng-hide="quiz.questionData.q === quiz.questionData.max" ng-disabled="!quiz.selectedOption" >Let's move on</button>
+  <button class="btn btn-success btn-lg" ng-hide="quiz.questionData.q !== quiz.questionData.max" ng-disabled="!quiz.selectedOption" ng-click="quiz.finishQuiz()">Submit your quiz</button>
 </div>
 </div>
 </div>
 
-</form> -->
 
 
-<!-- <div class="text-center">
-<buttn type="button" class="btn btn-success btn-lg">Submit your quiz</button>
-</div> -->
-</div>
+
+
+
+
+
+
+
+
+<!-- RESULTS AND TOP SCORES SECTION-->
 <div class="panel panel-success" ng-show="quiz.authenticated && quiz.finished">
   <div class="panel-heading">
     <div class="panel-title">
-      <h3>Congratulations! You have successfully completed the test!!</h3>
+      <h3>Finally why it took you so long?</h3>
     </div>
 
     </div>
     <div class="panel-body">
     <div class="col-lg-6 col-md-6 text-center">
-      <h4>Your total score is:</h4>
+      <h4>After struggle your score is:</h4>
       <p id="finalScore">{{quiz.resultData.score}}</p>
       <div class="alert alert-success">
-        You have scored very well. Keep it up. Start a new quiz and try to improve your score.
+
+        <div class="center-block img-responsive">
+          <img class="center-block img-responsive" ng-src="{{quiz.resultData.message.img}}" alt="{{quiz.resultData.message.msg}}"/>
+        </div>
+        <br/>
+        <p><strong>{{quiz.resultData.message.msg}}</strong></p>
       </div>
       <div class="text-center">
-        <button type="button" class="btn btn-primary" ng-click="quiz.startAgain()">Start the quiz again!!!</button>
+        <button type="button" class="btn btn-primary" ng-click="quiz.startAgain()">I love it, I want more!</button>
       </div>
     </div>
     <div class="col-lg-6 col-md-6">
         <div class="text-center">
-          <h4>High scores:</h4>
+          <h4>Hall of Fame</h4>
         </div>
         <table class="table table-bordered table-hover table-responsive">
           <tbody>
-            <tr>
+            <tr ng-repeat="highScore in quiz.resultData.scores">
               <td>
-                userid1
+                {{highScore.name}}
               </td>
               <td>
-                49
-              </td>
-            </tr>
-            <tr>
-              <td>
-                userid2
-              </td>
-              <td>
-                42
-              </td>
-            </tr>
-            <tr>
-              <td>
-                userid3
-              </td>
-              <td>
-                41
-              </td>
-            </tr>
-            <tr>
-              <td>
-                userid4
-              </td>
-              <td>
-                41
-              </td>
-            </tr>
-            <tr>
-              <td>
-                userid5
-              </td>
-              <td>
-                38
+                {{highScore.score}}
               </td>
             </tr>
           </tbody>
@@ -300,370 +200,105 @@
       <li><a href="https://github.com/jockgu/franklin-hackathon">GitHub Project</a></li>
     </ul>
   </div>
+  <div class="loading" ng-show="quiz.busy">Loading&#8230;</div>
 </footer>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
 <script type="text/javascript">
 (function(){
-  var quizathon = angular.module("quizathon", []);
+  var quizathon = angular.module("quizathon", ['ngAnimate']);
 
   quizathon.controller("quizathonCtrl",["$http", function ($http) {
     var quiz = this;
-    // quiz.currentShownId = 0;
-    $http({
-      method: 'GET',
-      url: '/api',
-      dataType: 'text'
-    })
-    .success(function (data) {
-      console.log(data);
-      if(data.phase === 0) {
-        quiz.authenticated = false;
-        quiz.finished = false;
-      }
-      else if (data.phase === 1) {
-        quiz.authenticated = true;
-        quiz.finished = false;
-        quiz.questionData = data;
-      }
-      else if (data.phase === 2) {
-        quiz.authenticated = true;
-        quiz.finished = true;
-        quiz.resultData = data;
-      }
-
-    });
-    // quiz.authenticated = false;
-    // quiz.finished = false;
     quiz.selectedOption = "";
-    var jsonObj = [
-      {
-        id: 1,
-        q: "What is the color of the pic you see below",
-        qType: "img",
-        imgPath: "/images/questions/placeholder.png",
-        opts:  [
-          {
-            id: 1,
-            val:"Red"
-          },
-          {
-            id: 2,
-            val: "Blue"
-          },
-          {
-            id: 3,
-            val: "Green"
-          },
-          {
-            id: 4,
-            val: "Yellow"
-          }
-        ],
-        diff: 2
-      },
-      {
-        id: 2,
-        q: "Why is the sky blue",
-        qType: "normal",
-        opts: [
-          {
-            id: 1,
-            val: "I don't know"
-          },
-          {
-            id: 2,
-            val: "I don't care"
-          },
-          {
-            id: 3,
-            val: "I like Red"
-          },
-          {
-            id: 4,
-            val: "Its complicated"
-          }
-        ],
-        diff: 9
-      },
-      {
-        id: 5,
-        q: "When does it rain",
-        qType: "normal",
-        opts: [
-          {
-            id: 1,
-            val: "I don't know"
-          },
-          {
-            id: 2,
-            val: "I don't care"
-          },
-          {
-            id: 3,
-            val: "Whenever it likes"
-          },
-          {
-            id: 4,
-            val: "Its complicated"
-          }
-        ],
-        diff: 5
-      },
-      {
-        id: 1,
-        q: "What is the color of the pic you see below",
-        qType: "img",
-        imgPath: "/images/questions/placeholder.png",
-        opts:  [
-          {
-            id: 1,
-            val:"Red"
-          },
-          {
-            id: 2,
-            val: "Blue"
-          },
-          {
-            id: 3,
-            val: "Green"
-          },
-          {
-            id: 4,
-            val: "Yellow"
-          }
-        ],
-        diff: 2
-      },
-      {
-        id: 2,
-        q: "Why is the sky blue",
-        qType: "normal",
-        opts: [
-          {
-            id: 1,
-            val: "I don't know"
-          },
-          {
-            id: 2,
-            val: "I don't care"
-          },
-          {
-            id: 3,
-            val: "I like Red"
-          },
-          {
-            id: 4,
-            val: "Its complicated"
-          }
-        ],
-        diff: 9
-      },
-      {
-        id: 5,
-        q: "When does it rain",
-        qType: "normal",
-        opts: [
-          {
-            id: 1,
-            val: "I don't know"
-          },
-          {
-            id: 2,
-            val: "I don't care"
-          },
-          {
-            id: 3,
-            val: "Whenever it likes"
-          },
-          {
-            id: 4,
-            val: "Its complicated"
-          }
-        ],
-        diff: 5
-      },
-      {
-        id: 1,
-        q: "What is the color of the pic you see below",
-        qType: "img",
-        imgPath: "/images/questions/placeholder.png",
-        opts:  [
-          {
-            id: 1,
-            val:"Red"
-          },
-          {
-            id: 2,
-            val: "Blue"
-          },
-          {
-            id: 3,
-            val: "Green"
-          },
-          {
-            id: 4,
-            val: "Yellow"
-          }
-        ],
-        diff: 2
-      },
-      {
-        id: 2,
-        q: "Why is the sky blue",
-        qType: "normal",
-        opts: [
-          {
-            id: 1,
-            val: "I don't know"
-          },
-          {
-            id: 2,
-            val: "I don't care"
-          },
-          {
-            id: 3,
-            val: "I like Red"
-          },
-          {
-            id: 4,
-            val: "Its complicated"
-          }
-        ],
-        diff: 9
-      },
-      {
-        id: 5,
-        q: "When does it rain",
-        qType: "normal",
-        opts: [
-          {
-            id: 1,
-            val: "I don't know"
-          },
-          {
-            id: 2,
-            val: "I don't care"
-          },
-          {
-            id: 3,
-            val: "Whenever it likes"
-          },
-          {
-            id: 4,
-            val: "Its complicated"
-          }
-        ],
-        diff: 5
-      },
-      {
-        id: 5,
-        q: "When does it rain",
-        qType: "normal",
-        opts: [
-          {
-            id: 1,
-            val: "I don't know"
-          },
-          {
-            id: 2,
-            val: "I don't care"
-          },
-          {
-            id: 3,
-            val: "Whenever it likes"
-          },
-          {
-            id: 4,
-            val: "Its complicated"
-          }
-        ],
-        diff: 5
-      }
-
-    ];
     quiz.hello = "Hello World";
-    quiz.questions = jsonObj;
+    quiz.progress = 0;
+    quiz.questionData = {};
+    quiz.busy = false;
 
-    // quiz.slideIt = function(forward) {
-    //   if(forward && quiz.currentShownId < quiz.questions.length-1) {
-    //     quiz.currentShownId++;
-    //     //console.log("Current index: " + quiz.currentShownId);
-    //   }
-    //   else if(!forward && quiz.currentShownId > 0) {
-    //     quiz.currentShownId--;
-    //     //console.log("Current index: " + quiz.currentShownId);
-    //   }
-    // }
-
-    quiz.startQuiz = function() {
+    var getData = function(context) {
+        setTimeout(3000);
       $http({
-        method: 'POST',
+        method: 'GET',
         url: '/api',
-        data: {
-          'username': quiz.uid
-        },
         dataType: 'text'
       })
       .success(function (data) {
-        console.log(data);
-        quiz.authenticated = true;
-        quiz.categorySelected = document.getElementById("category").value;
-        console.log("User: " + quiz.uid + ". Selected category: " + quiz.categorySelected);
-        $http({
-          method: 'GET',
-          url: '/api',
-          dataType: 'text'
-        })
-        .success(function (data) {
+        if(data.phase === 0) {
+          quiz.authenticated = false;
+          quiz.finished = false;
+          quiz.busy = false;
+        }
+        else if (data.phase === 1) {
+          quiz.authenticated = true;
+          quiz.finished = false;
+          quiz.selectedOption = false;
+          //console.log(data);
           quiz.questionData = data;
-          console.log(data);
-        });
+          quiz.busy = false;
+          quiz.currentProgressBarWidth();
+
+        }
+        else if (data.phase === 2) {
+          quiz.authenticated = true;
+          quiz.finished = true;
+          quiz.resultData = data;
+          quiz.resultData.message = getScoreMessage(parseInt(quiz.resultData.score));
+          quiz.busy = false;
+        }
       });
+    };
+
+    var postData = function(context) {
+      $http({
+        method: 'POST',
+        url: context.url,
+        dataType: 'text',
+        data: context.data
+      })
+      .success(function (data) {
+        getData();
+      });
+    };
+
+    getData();
+
+    quiz.startQuiz = function() {
+      quiz.categorySelected = document.getElementById("category").value;
+      //console.log("User: " + quiz.uid + ". Selected category: " + quiz.categorySelected);
+      quiz.busy = true;
+      postData({
+        'url': '/api',
+        'data': {
+          'category': quiz.categorySelected,
+          'username': quiz.uid
+        }
+      });
+
       return false;
     }
 
     quiz.nextQuestion = function () {
       if(quiz.questionData !== undefined) {
         if(quiz.selectedOption !== "" || quiz.selectedOption!== null || quiz.selectedOption !== undefined) {
-          console.log("The selected option value is: " + quiz.selectedOption);
-          var score;
-          for (var i = 0; i < quiz.questionData.arr.length; i++) {
-            if(quiz.questionData.arr[i].c === parseInt(quiz.selectedOption)) {
-              score = quiz.questionData.arr[i].s || 0;
+          //console.log("The selected option value is: " + quiz.selectedOption);
+          quiz.busy = true;
+          postData({
+            'url': '/api',
+            'data': {
+              'choice': quiz.selectedOption
             }
-          }
-          if(score === undefined) {
-            score = 0;
-          }
-          console.log("Corresponding score: " + score);
-          if(score!== undefined || score!== "" || score !== null) {
-            console.log("inside the http call for next question");
-            quiz.questionData = {};
-            $http({
-              method: 'POST',
-              url: '/api',
-              data: {
-                'choice': score
-              },
-              dataType: 'text'
-            })
-            .success(function (data) {
-              console.log(data);
-              $http({
-                method: 'GET',
-                url: '/api',
-                dataType: 'text'
-              })
-              .success(function (data) {
-                quiz.questionData = data;
-                console.log(data);
-              });
-            });
-          }
-
-
+          });
         }
       }
       return false;
@@ -672,47 +307,15 @@
     quiz.finishQuiz = function () {
       if(quiz.questionData !== undefined) {
         if(quiz.selectedOption !== "" || quiz.selectedOption!== null || quiz.selectedOption !== undefined) {
-          console.log("The selected option value is: " + quiz.selectedOption);
-          var score;
-          for (var i = 0; i < quiz.questionData.arr.length; i++) {
-            if(quiz.questionData.arr[i].c === parseInt(quiz.selectedOption)) {
-              score = quiz.questionData.arr[i].s || 0;
-            }
-          }
-          if(score === undefined) {
-            score = 0;
-          }
-          console.log("Corresponding score: " + score);
-          if(score!== undefined || score!== "" || score !== null) {
-            console.log("inside the http call for result");
-            quiz.questionData = {};
-            $http({
-              method: 'POST',
-              url: '/api',
-              data: {
-                'choice': score
-              },
-              dataType: 'text'
-            })
-            .success(function (data) {
-              console.log(data);
-              $http({
-                method: 'GET',
-                url: '/api',
-                dataType: 'text'
-              })
-              .success(function (data) {
-                if(data.phase === 2) {
-                  quiz.finished = true;
-                  quiz.resultData = data;
-                  console.log(data);
-                }
-
-              });
+          //console.log("The selected option value is: " + quiz.selectedOption);
+          quiz.busy = true;
+            postData({
+              'url': '/api',
+              'data': {
+                'choice': quiz.selectedOption
+              }
             });
-          }
-
-
+            // quiz.questionData = {};
         }
       }
 
@@ -720,30 +323,103 @@
     }
 
     quiz.startAgain = function () {
-      $http({
-        method: 'POST',
-        url: '/reset',
-        dataType: 'text'
-      })
-      .success(function (data) {
-        if(data.phase === 0) {
-          quiz.authenticated = false;
-          quiz.finished = false;
-          quiz.questionData = {};
-          quiz.resultData = {};
-          console.log(data);
-        }
+        quiz.busy = true;
+      postData({
+        'url': '/reset'
       });
       return false;
     }
 
     quiz.currentProgressBarWidth = function () {
       if(quiz.questionData !== undefined) {
-        var percent = Math.round(quiz.questionData.q*100/quiz.questionData.max);
-        // console.log(percent);
-        return percent;
+        var percent = Math.round(parseInt(quiz.questionData.q)*100/parseInt(quiz.questionData.max));
+        //console.log(percent);
+        quiz.progress = percent;
+        return;
       }
     }
+
+    var getScoreMessage = function (score) {
+      if(score <= 10) {
+        return {
+          msg: "What a looser you apparently have no clue about anything!",
+          img: "/images/messages/0-10.jpg"
+        }
+      }
+      else if (score > 10 && score <=20 ) {
+        return {
+          msg: "No comments on your result it explains itself.",
+          img: "/images/messages/11-20.jpg"
+        }
+      }
+      else if (score > 20 && score <=30 ) {
+        return {
+          msg: "Apparently you know somehitng but probably you had more luck then knowledge.",
+          img: "/images/messages/21-30.jpg"
+        }
+      }
+      else if (score > 30 && score <=40 ) {
+        return {
+          msg: "You Have reached the level of 10 year old kid - Congratulations!",
+          img: "/images/messages/31-40.jpg"
+        }
+      }
+      else if (score > 40 && score <=50 ) {
+        return {
+          msg: "You almost there to advance to next grade, keep on trying and maybe you will make it. ",
+          img: "/images/messages/41-50.jpg"
+        }
+      }
+      else if (score > 50 && score <=60 ) {
+        return {
+          msg: "Passed! - Go and have a beer since it looks as you are good at this!",
+          img: "/images/messages/51-60.jpg"
+        }
+      }
+      else if (score > 60 && score <=70 ) {
+        return {
+          msg: "Your IQ is better then average, but still not a genius!",
+          img: "/images/messages/61-70.jpg"
+        }
+      }
+      else if (score > 70 && score <=80 ) {
+        return {
+          msg: "So you think you are a smartass? Nice.....",
+          img: "/images/messages/71-80.jpg"
+        }
+      }
+      else if (score > 80 && score <=90 ) {
+        return {
+          msg: "You have reached the level of Duke of Quizathon!",
+          img: "/images/messages/81-90.jpg"
+        }
+      }
+      else if (score > 90 && score <=100) {
+        return {
+          msg: "Einstein &  Darwin can polish your shoes! - You Rock!",
+          img: "/images/messages/91-100.jpg"
+        }
+      }
+    }
+
+
+
+
+  }]);
+  quizathon.config(['$httpProvider', function($httpProvider) {
+      //initialize get if not there
+      if (!$httpProvider.defaults.headers.get) {
+          $httpProvider.defaults.headers.get = {};
+      }
+
+      // Answer edited to include suggestions from comments
+      // because previous version of code introduced browser-related errors
+
+      //disable IE ajax request caching
+      $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+      // extra
+      $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+      $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
   }]);
 })();
 

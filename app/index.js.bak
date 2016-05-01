@@ -3,11 +3,8 @@ var session = require('express-session');
 var extend = require('extend');
 var bodyParser = require('body-parser');
 var qdb = require('./questions.json');
-var sdb = require('./scores.json');
-var fs = require('fs');
 var app = express();
-var qlength = 10; // number of questions
-
+var qlength = 5; // TODO change to 10
 
 // Choose random quiz questions; returns array [ {id: 5}, {id: 14}, {id: 1} ... to num ]
 function getQuizSet(jsonobj, num, cat) {
@@ -30,6 +27,7 @@ function getQuizSet(jsonobj, num, cat) {
     // splice array
     qall.splice(0, qall.length - num);
 
+    //console.log(JSON.stringify(qall));
     return qall;
 }
 
@@ -53,13 +51,12 @@ function getStateObject(obj) {
     };
 };
 
-// Return current question
+// Return current question // TODO fill
 function getQuestion(jsonobj, q, num) {
     return {
         "q": q,
         "max": qlength,
         "qt": jsonobj[num].question,
-        "img": jsonobj[num].img.toString().trim(),
         "arr": [
             {"c": 1, "t": jsonobj[num].choice[0].c},
             {"c": 2, "t": jsonobj[num].choice[1].c},
@@ -97,13 +94,10 @@ app.get('/api', function (req, res) {
             res.json(getStateObject(sess.state));
             break;
         case 1:
-            // setTimeout(function() {
-            //     res.json(extend(getStateObject(sess.state), getQuestion(qdb, sess.state.q, sess.state.qset[sess.state.q-1].id)));
-            // }, 3000);
             res.json(extend(getStateObject(sess.state), getQuestion(qdb, sess.state.q, sess.state.qset[sess.state.q-1].id)));
             break;
         case 2:
-            res.json(extend(getStateObject(sess.state), {score: sess.state.score}, {scores: sdb}));
+            res.json(extend(getStateObject(sess.state), {score: sess.state.score}));
             break;
         default:
             res.json(getStateObject(sess.state));
@@ -148,53 +142,16 @@ app.post('/api', function(req, res) {
                     && parseInt(req.body.choice) > 0
                     && parseInt(req.body.choice) < 5) {
 
-                // score
-                sess.state.score += qdb[sess.state.qset[sess.state.q-1].id].choice[req.body.choice-1].answ;;
+                sess.state.score = sess.state.score + parseInt(req.body.choice); //TODO
                 sess.state.q++;
 
-                // finalize test
                 if (sess.state.q > qlength) {
                     sess.state.phase = 2;
-
-                    // normalize score (0-100)
-                    var maxs = 0;
-                    var mins = 0;
-                    var ta = [];
-                    for (var i = 0; i < sess.state.qset.length; i++) {
-                        ta = [
-                            qdb[sess.state.qset[i].id].choice[0].answ,
-                            qdb[sess.state.qset[i].id].choice[1].answ,
-                            qdb[sess.state.qset[i].id].choice[2].answ,
-                            qdb[sess.state.qset[i].id].choice[3].answ
-                        ];
-                        maxs += Math.max.apply(null, ta);
-                        mins += Math.min.apply(null, ta);
-                    }
-
-                    sess.state.score = Math.round(100.0*(sess.state.score-mins)/(maxs-mins));
-
-                    // score table
-                    for (i = 0; i < sdb.length; i++) {
-                        console.log("s: " + sdb[i].score);
-                        if (sess.state.score > sdb[i].score) {
-                            console.log("inserting before it: " + sess.state.score);
-                            sdb.splice(i, 0, {name: sess.state.name, score: sess.state.score});
-                            sdb.splice(-1,1);
-
-                            // save scores json file (modified)
-                            fs.writeFile("./app/scores.json", JSON.stringify(sdb), function(err) {
-                                if(err) {
-                                    return console.log(err);
-                                }
-                            });
-
-                            break;
-                        }
-                    }
                 }
             }
             break;
         case 2:
+
             break;
     }
 

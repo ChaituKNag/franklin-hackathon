@@ -6,7 +6,7 @@ var qdb = require('./questions.json');
 var sdb = require('./scores.json');
 var fs = require('fs');
 var app = express();
-var qlength = 10; // number of questions
+var qlength = 10; // number of questions 
 
 
 // Choose random quiz questions; returns array [ {id: 5}, {id: 14}, {id: 1} ... to num ]
@@ -17,7 +17,7 @@ function getQuizSet(jsonobj, num, cat) {
             qall.push({"id": i});
         }
     }
-
+ 
     var l = qall.length; // Fisher Yates Shuffle alg
     var j = 0, temp;
     while (l--) {
@@ -26,10 +26,10 @@ function getQuizSet(jsonobj, num, cat) {
         qall[l] = qall[j];
         qall[j] = temp;
     }
-
+    
     // splice array
     qall.splice(0, qall.length - num);
-
+ 
     return qall;
 }
 
@@ -53,12 +53,12 @@ function getStateObject(obj) {
     };
 };
 
-// Return current question
+// Return current question 
 function getQuestion(jsonobj, q, num) {
     return {
         "q": q,
         "max": qlength,
-        "qt": jsonobj[num].question,
+        "qt": jsonobj[num].question, 
         "img": jsonobj[num].img.toString().trim(),
         "arr": [
             {"c": 1, "t": jsonobj[num].choice[0].c},
@@ -97,9 +97,6 @@ app.get('/api', function (req, res) {
             res.json(getStateObject(sess.state));
             break;
         case 1:
-            // setTimeout(function() {
-            //     res.json(extend(getStateObject(sess.state), getQuestion(qdb, sess.state.q, sess.state.qset[sess.state.q-1].id)));
-            // }, 3000);
             res.json(extend(getStateObject(sess.state), getQuestion(qdb, sess.state.q, sess.state.qset[sess.state.q-1].id)));
             break;
         case 2:
@@ -123,7 +120,6 @@ app.post('/api', function(req, res) {
     // Do actions
     switch(sess.state.phase) {
         case 0:
-            console.log(JSON.stringify(req.body));
             if (typeof req.body.username !== 'undefined'
                     && req.body.username !== null
                     && req.body.username.length > 0
@@ -132,12 +128,12 @@ app.post('/api', function(req, res) {
                     && req.body.category !== null
                     && req.body.category.length > 0
                     && req.body.category.length < 25
-
+                    
                     ) {
 
                 sess.state.name = req.body.username;
                 sess.state.phase = 1;
-                sess.state.qset = getQuizSet(qdb, qlength, req.body.category);
+                sess.state.qset = getQuizSet(qdb, qlength, req.body.category); 
 
             }
             break;
@@ -147,7 +143,7 @@ app.post('/api', function(req, res) {
                     && !isNaN(parseInt(req.body.choice))
                     && parseInt(req.body.choice) > 0
                     && parseInt(req.body.choice) < 5) {
-
+                
                 // score
                 sess.state.score += qdb[sess.state.qset[sess.state.q-1].id].choice[req.body.choice-1].answ;;
                 sess.state.q++;
@@ -155,7 +151,7 @@ app.post('/api', function(req, res) {
                 // finalize test
                 if (sess.state.q > qlength) {
                     sess.state.phase = 2;
-
+                    
                     // normalize score (0-100)
                     var maxs = 0;
                     var mins = 0;
@@ -170,7 +166,7 @@ app.post('/api', function(req, res) {
                         maxs += Math.max.apply(null, ta);
                         mins += Math.min.apply(null, ta);
                     }
-
+                    
                     sess.state.score = Math.round(100.0*(sess.state.score-mins)/(maxs-mins));
 
                     // score table
@@ -180,14 +176,14 @@ app.post('/api', function(req, res) {
                             console.log("inserting before it: " + sess.state.score);
                             sdb.splice(i, 0, {name: sess.state.name, score: sess.state.score});
                             sdb.splice(-1,1);
-
+                            
                             // save scores json file (modified)
-                            fs.writeFile("./app/scores.json", JSON.stringify(sdb), function(err) {
+                            fs.writeFile("./app/scores.json", JSON.stringify(sdb), function(err) { 
                                 if(err) {
                                     return console.log(err);
                                 }
                             });
-
+                            
                             break;
                         }
                     }
@@ -219,3 +215,4 @@ app.post('/api', function(req, res) {
 var server = app.listen(3000, function () {
 
 });
+
