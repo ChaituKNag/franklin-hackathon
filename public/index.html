@@ -39,11 +39,6 @@
   <div class="navbar navbar-default navbar-fixed-top " ng-show="quiz.authenticated">
     <div class="container" id="">
       <div class="navbar-header">
-        <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span><span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
         <a href="/" class="navbar-brand">
           <!-- <img class="img-responsive img-thumbnail" src="/images/quizathon_logo.png" alt="Quizathon logo"/> -->
           <i class="fa fa-cube"></i>Quizathon</a>
@@ -96,7 +91,7 @@
   <!-- QUIZ AND QUESTIONS SECTION-->
 <div class="row" ng-show="quiz.authenticated && !quiz.finished">
 <div class="">
-
+<br/>
   <div class="panel panel-default">
     <div class="panel-body">
       <p>Progress-O-Meter (Question {{quiz.questionData.q}}/{{quiz.questionData.max}})</p>
@@ -227,8 +222,7 @@
     quiz.busy = false;
 
     var getData = function(context) {
-        setTimeout(3000);
-      $http({
+        $http({
         method: 'GET',
         url: '/api',
         dataType: 'text'
